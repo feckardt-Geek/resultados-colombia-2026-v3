@@ -1,4 +1,4 @@
-<!-- HTML autonomo generado 2026-06-02 10:29 (corte 31/05/2026 21:38). Para actualizar: python3 build_html.py -->
+<!-- HTML autonomo generado 2026-06-02 10:40 (corte 31/05/2026 21:38). Para actualizar: python3 build_html.py -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -452,8 +452,9 @@ body {
 .combo__meta{font-size:12.5px;color:var(--tinta-suave);margin-bottom:12px;}
 .combo__bars{display:flex;flex-direction:column;gap:9px;}
 .combo__row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;}
-.combo__cn{font-size:12.5px;font-weight:600;}
-.combo__cp{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;}
+.combo__cn{font-size:12.5px;font-weight:600;display:flex;flex-direction:column;gap:1px;}
+.combo__cn-vot{font-weight:700;font-size:12px;color:var(--tinta);font-variant-numeric:tabular-nums;margin-left:16px;}
+.combo__cp{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;align-self:start;}
 .combo__pista{grid-column:1/-1;height:7px;border-radius:999px;background:var(--linea);overflow:hidden;}
 .combo__fill{height:100%;border-radius:999px;transition:width .5s ease;}
 
@@ -1862,7 +1863,9 @@ window.__HIST2022__ = {"r1": {"AMAZONAS": {"nombre": "Amazonas", "petro": {"v": 
     const top = a.lista.slice(0, 4), maxv = Math.max.apply(null, top.map((c) => c.votos).concat([1]));
     const bars = top.map((c) => {
       const p = (c.votos / den) * 100;
-      return '<div class="combo__row"><span class="combo__cn"><span class="dept__dot" style="background:' + c.color + ';display:inline-block;margin-right:5px"></span>' + c.nombre + '</span>' +
+      return '<div class="combo__row"><span class="combo__cn">' +
+        '<span class="combo__cn-nom"><span class="dept__dot" style="background:' + c.color + ';display:inline-block;margin-right:5px"></span>' + c.nombre + '</span>' +
+        '<span class="combo__cn-vot">' + fmt.format(c.votos) + ' votos</span></span>' +
         '<span class="combo__cp">' + pct(p) + '</span>' +
         '<span class="combo__pista"><span class="combo__fill" style="width:' + ((c.votos / maxv) * 100) + '%;background:' + c.color + '"></span></span></div>';
     }).join("");
