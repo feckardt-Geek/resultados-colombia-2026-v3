@@ -1,4 +1,4 @@
-<!-- HTML autonomo generado 2026-06-04 15:40 (corte 31/05/2026 21:38). Para actualizar: python3 build_html.py -->
+<!-- HTML autonomo generado 2026-06-04 15:46 (corte 31/05/2026 21:38). Para actualizar: python3 build_html.py -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -2690,7 +2690,7 @@ window.__MUNIS__ = {"60": {"ok": true, "departamento": "60", "total": 11, "munic
     if (!depts.length || !cities.length) return;
     $("panelExplorar").style.display = "";
     if (!_explBuilt) {
-      cities.slice(0, 4).forEach((n) => _explSel.ciu.add(n));   // por defecto: 4 ciudades
+      // Sin selección por defecto: el usuario elige los territorios que quiera.
       _explChips("explDeptChips", depts, "dept");
       _explChips("explCiuChips", cities, "ciu");
       document.querySelectorAll(".expl__act").forEach((b) => {
