@@ -1,0 +1,157 @@
+================================================================
+  DASHBOARD ELECCIONES PRESIDENCIALES COLOMBIA 2026
+  Enlaces, versiones y registro de cambios
+  Actualizado: 1 de junio de 2026
+================================================================
+
+----------------------------------------------------------------
+ENLACES PUBLICOS (para enviar por WhatsApp / abrir en cualquier
+navegador, celular o PC; se comparte el ENLACE, no el archivo)
+----------------------------------------------------------------
+
+  >> VERSION 3.0  (la mas reciente y completa)  <<
+     https://feckardt-geek.github.io/resultados-colombia-2026-v3/
+     Repositorio: feckardt-Geek/resultados-colombia-2026-v3
+
+  >> VERSION 2.0
+     https://feckardt-geek.github.io/resultados-colombia-2026-v2/
+     Repositorio: feckardt-Geek/resultados-colombia-2026-v2
+
+  >> VERSION 1.0  (la primera publicada)
+     https://feckardt-geek.github.io/resultados-colombia-2026/
+     Repositorio: feckardt-Geek/resultados-colombia-2026
+
+  Nota: el enlace NO cambia al actualizarlo; siempre es el mismo.
+
+
+----------------------------------------------------------------
+QUE CONTIENE CADA VERSION
+----------------------------------------------------------------
+
+VERSION 1.0  -- Dashboard base de la jornada
+  - Resultado nacional en vivo (boletin, % mesas, votos).
+  - Participacion vs. abstencion + desglose de votos
+    (validos, en blanco, nulos, no marcados).
+  - Mapa de Colombia coloreado por ganador por departamento.
+  - Tablas por departamento (34) y por ciudad (20 principales),
+    con 1.o, 2.o y 3.o (Paloma) lugar, votos y % de cada uno.
+  - "Departamentos ganados" (conteo por candidato).
+  - Colombianos en el exterior (por pais).
+  - Panel de Paloma Valencia.
+  - Comparativo nacional 2026 vs 2022 (cifras).
+  - Proyeccion a 2.a vuelta (con UN control).
+  - Polymarket (probabilidades de mercado).
+  - Ultimas 3 elecciones (2014/2018/2022, seleccion multiple).
+  - Encuestas vs. resultado real (cual acerto mas: AtlasIntel).
+
+VERSION 2.0  -- Todo lo de la 1.0, MAS:
+  - Panel "Colombia 2022 por departamento" (Petro, Rodolfo, Fico;
+    1.a o 2.a vuelta).
+  - Panel "¿Hacia donde se movio Colombia? 2022 -> 2026":
+    mapa de giro, volteos, tabla y titular nacional.
+  - Correccion de nombre: "Castro" -> "Cepeda".
+  - Proyeccion a 2.a vuelta con 7 controles ajustables, una por
+    cada bolsa de votos en disputa:
+       * Paloma Valencia       (~1.640.000 votos)
+       * Sergio Fajardo        (~1.009.000 votos)
+       * Miguel Uribe Londono  (~29.000 votos)
+       * Santiago Botero       (~206.000 votos)
+       * Claudia Lopez         (~226.000 votos)
+       * Indecisos / otros     (~119.000 votos)
+       * Voto en blanco        (~407.000 votos)
+     Cada control define que % de esa bolsa va a De la Espriella y
+     cuanto a Cepeda; la barra se recalcula en vivo. Por defecto:
+     De la Espriella 53,4% vs Cepeda 46,6%.
+
+VERSION 3.0  -- Todo lo de la 2.0, MAS:
+  - Panel "Explorar y comparar territorios": seleccion multiple
+    (chips) para escoger 1 o VARIOS departamentos y/o ciudades
+    a la vez y verlos juntos en una tabla comparativa (1.o, 2.o
+    y 3.o lugar, participacion y % de mesas de cada uno).
+    Incluye botones "todos / ninguno" para cada grupo.
+
+  Pendiente (fase 2): resultados 2022 por CIUDAD (no hay fuente
+  publica limpia a nivel municipal; en proceso).
+
+
+----------------------------------------------------------------
+REGISTRO DE CAMBIOS (cronologico)
+----------------------------------------------------------------
+
+[31 may 2026]  Se crea el dashboard local conectado al feed
+               oficial de la Registraduria (resultados en vivo).
+[31 may 2026]  Se agregan: participacion/abstencion, mapa,
+               departamentos, ciudades, exterior, Paloma,
+               proyeccion, Polymarket, historicos, encuestas.
+[31 may 2026]  Se genera el HTML autonomo compartible y el
+               informe PDF con la marca EDFO.
+[ 1 jun 2026]  Se publica la VERSION 1.0 en GitHub Pages.
+[ 1 jun 2026]  VERSION 2.0: comparativo 2022 vs 2026 por
+               departamento (panel 2022 + mapa de giro).
+[ 1 jun 2026]  Se corrige "Castro" -> "Cepeda".
+[ 1 jun 2026]  Proyeccion a 2.a vuelta con 4 controles y luego
+               ampliada a 7 (Paloma, Fajardo, Uribe, Botero,
+               Claudia Lopez, Indecisos, Blanco).
+[ 1 jun 2026]  VERSION 3.0: explorador de seleccion multiple
+               de departamentos y ciudades.
+[ 1 jun 2026]  "Seleccion combinada": total de votos bajo cada
+               candidato.
+[ 1 jun 2026]  Drill-down: al elegir un departamento aparecen
+               abajo TODOS sus municipios con los 3 candidatos
+               (De la Espriella, Cepeda, Valencia) en % y votos.
+               (sugerencia de un analista que usa el app.)
+[ 1 jun 2026]  Censo (habilitados) + abstencion por departamento,
+               ciudad y municipio (para ver abstencionismo regional).
+[ 1 jun 2026]  Panel "Ultimas 3 elecciones": cada tarjeta muestra
+               habilitados, votacion total y % de abstencion 2014/
+               2018/2022 por vuelta.
+
+
+----------------------------------------------------------------
+COMO ACTUALIZAR (por ejemplo el 21 de junio, 2.a vuelta)
+----------------------------------------------------------------
+
+  Para la VERSION 3.0:   ./publicar3.sh
+  Para la VERSION 2.0:   ./publicar2.sh
+  Para la VERSION 1.0:   ./publicar.sh
+
+  (O simplemente pedirme a mi: "actualiza la pagina".)
+  Tras correrlo, la pagina se actualiza en ~1 minuto y el enlace
+  sigue siendo el mismo.
+
+
+----------------------------------------------------------------
+ARCHIVOS LOCALES (en la carpeta del proyecto)
+----------------------------------------------------------------
+
+  server.py        -> dashboard local en vivo (python3 server.py
+                      -> http://localhost:8000)
+  build_html.py    -> genera el HTML autonomo compartible
+  make_pdf.py      -> genera el informe PDF EDFO
+  publicar.sh      -> actualiza y publica la VERSION 1.0
+  publicar2.sh     -> actualiza y publica la VERSION 2.0
+  publicar3.sh     -> actualiza y publica la VERSION 3.0
+  Resultados_Elecciones_Colombia_2026.html -> archivo autonomo
+                      (tambien hay copia en el Escritorio)
+  EDFO_Informe_Elecciones_Colombia_2026.pdf -> en el Escritorio
+  web/             -> codigo del tablero (html, css, js, datos)
+  data/            -> datos historicos 2022 y serie de boletines
+
+
+----------------------------------------------------------------
+FUENTES
+----------------------------------------------------------------
+
+  - Resultados 2026: Registraduria Nacional del Estado Civil
+    (feed oficial en vivo).
+  - Resultados 2022 por departamento: Registraduria / Wikipedia
+    (sumas nacionales validadas).
+  - Encuestas: Wikipedia (sondeos presidenciales 2026).
+  - Polymarket: mercado de prediccion (probabilidades).
+  - Mapa: GeoJSON de departamentos (John Guerra, dominio publico).
+
+  Los resultados de la Registraduria durante la jornada son
+  PRELIMINARES; no constituyen el escrutinio oficial con valor
+  juridico. Las proyecciones y probabilidades son interpretativas,
+  no garantizan resultados.
+================================================================
