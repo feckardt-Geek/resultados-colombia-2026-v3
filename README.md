@@ -5,87 +5,67 @@ resultados por departamento, ciudad y exterior, con explorador de selección mú
 mapa de giro, comparativo histórico **2022 → 2026**, panel **escrutinio vs. preconteo**
 y un asistente IA por panel.
 
-**Demo (GitHub Pages):** `https://feckardt-geek.github.io/resultados-colombia-2026-v3/`
-*(si Pages está habilitado en Settings → Pages, sirviendo `index.html` desde la raíz).*
+**Demo (GitHub Pages):** https://feckardt-geek.github.io/resultados-colombia-2026-v3/
 
-> ℹ️ **Repo unificado (Opción A).** Este repositorio reúne el proyecto completo:
-> el **código fuente** (generador + servidor local + datos) y el **dashboard publicado**
-> (`index.html`). Antes el proyecto estaba dividido en dos repos:
-> - `elecciones-colombia-2026` (privado) → la fuente: scripts, datos y análisis.
-> - `resultados-colombia-2026-v3` (público) → la salida: solo `index.html`.
->
-> La integración del código fuente se hace con los pasos de la sección
-> [**Fusión de los dos repos**](#fusión-de-los-dos-repos-opción-a).
-
----
+Este repositorio reúne **todo el proyecto**: el código fuente (generador + servidor
+local + datos) y el dashboard publicado (`index.html`).
 
 ## Arquitectura
 
-El mismo `index.html` funciona en **dos modos**, que se resuelven solos según dónde se abra:
+El mismo dashboard funciona en **dos modos**, que se resuelven solos según dónde se abra:
 
-| | Local (desarrollo) | Público (GitHub Pages / archivo) |
+| | Local (desarrollo) | Público (GitHub Pages) |
 |---|---|---|
-| **Datos** | `fetch('/api/resultados')` en vivo, servido por `server.py` | datos incrustados en `window.__SNAP__` por `build_html.py` |
-| **Asistente IA** | `/api/chat` → `server.py` (usa `GEMINI_API_KEY`) | Cloudflare Worker (`window.IA_PROXY_URL`) |
+| **Datos** | `fetch('/api/...')` en vivo, servido por `server.py` | datos incrustados por `build_html.py` (`window.__SNAP__`) |
+| **Asistente IA** | `/api/chat` → `server.py` (lee `GEMINI_API_KEY` del `.env`) | Cloudflare Worker (`worker.js`, vía `IA_PROXY_URL`) |
 
 - **Fuente de datos:** preconteo oficial de la Registraduría Nacional del Estado Civil.
-- **Análisis:** comparativo histórico **2022 → 2026** y proyección a segunda vuelta.
-- **Seguridad:** la clave de Gemini vive en el Worker / variable de entorno local;
-  **nunca** se incrusta en el `index.html` publicado.
+- **La clave de Gemini nunca se versiona:** vive en `.env` (local) o como *Secret* del Worker.
 
-## Estructura (objetivo tras la fusión)
-
-> Los archivos de código provienen del repo `elecciones-colombia-2026`; los nombres
-> exactos pueden variar ligeramente. Lo confirmado por el propio `index.html` está marcado ✅.
+## Estructura
 
 ```
 .
-├── index.html        ✅ Dashboard autónomo PUBLICADO (lo sirve GitHub Pages). Generado por build_html.py
-├── build_html.py     ✅ Genera index.html incrustando el snapshot de datos (window.__SNAP__)
-├── server.py         ✅ Servidor local: /api/resultados (preconteo en vivo) y /api/chat (Gemini)
-├── app.js            ✅ Lógica del tablero (se inlinea en index.html al construir)
-├── data/                Boletines de la Registraduría + datos 2022 para el comparativo
-├── requirements.txt     Dependencias de Python
-├── .gitignore           Protege secretos (.env, *.key) y artefactos de Python
-└── README.md
+├── index.html        Dashboard PUBLICADO (lo sirve GitHub Pages). Generado por build_html.py.
+├── build_html.py     Genera el dashboard incrustando los datos (lee de web/).
+├── server.py         Servidor local: sirve web/ + /api/resultados, /api/chat (Gemini), etc.
+├── publicar.ps1      Atajo: regenera el dashboard y lo publica (Windows / PowerShell).
+├── make_pdf.py       Genera el informe PDF (marca EDFO).
+├── make_swing_img.py Genera la imagen del mapa de giro 2022→2026.
+├── worker.js         Cloudflare Worker: proxy a Gemini para el chat en la web pública.
+├── web/              Fuente del tablero: index.html, styles.css, app.js, asistente.*, escrutinio.js, geojson.
+├── data/             Histórico 2022 + serie de boletines.
+├── IA_SETUP.md       Cómo activar el asistente IA (local y público).
+└── ENLACES_Y_VERSIONES.txt   Enlaces, versiones y registro de cambios.
 ```
 
-## Uso
+## Actualizar el dashboard (p. ej. la 2.ª vuelta del 21 de junio)
 
-**Ver el dashboard publicado:** abre la demo de GitHub Pages, o el `index.html` directamente.
+**Forma rápida (Windows / PowerShell):**
+```powershell
+.\publicar.ps1
+```
+Consulta el feed oficial, regenera `index.html` y lo sube; GitHub Pages se actualiza
+en ~1 minuto (el enlace no cambia).
 
-**Desarrollo local** (datos en vivo + IA):
+**Manual / multiplataforma:**
+```bash
+export IA_PROXY_URL="https://elecciones-ia.federicoeckardt.workers.dev"   # Windows: $env:IA_PROXY_URL="..."
+python build_html.py
+cp Resultados_Elecciones_Colombia_2026.html index.html                   # Windows: Copy-Item -Force ...
+git add -A && git commit -m "Actualizar boletín" && git push origin main
+```
+
+## Desarrollo local (datos en vivo + IA)
 
 ```bash
-export GEMINI_API_KEY="tu_clave"   # necesaria para /api/chat
-python3 server.py                  # levanta el servidor local
-# abre http://localhost:<puerto>   (ver el puerto que imprime server.py)
+# Crea un .env con GEMINI_API_KEY=tu_clave   (no se sube; está en .gitignore)
+python server.py        # http://localhost:8000
 ```
-
-**Regenerar el HTML publicado tras un nuevo boletín:**
-
-```bash
-python3 build_html.py              # reescribe index.html con el snapshot actual
-git add index.html
-git commit -m "Actualizar boletín"
-git push                           # GitHub Pages redepliega solo
-```
+Ver `IA_SETUP.md` para el detalle del asistente IA y el despliegue del Worker.
 
 ## Despliegue (GitHub Pages)
 
-GitHub Pages sirve **`index.html` desde la raíz** de la rama de publicación.
-**No muevas `index.html` de la raíz** o se rompe la URL publicada. En público, el
-asistente IA pasa por el Cloudflare Worker (`IA_PROXY_URL`); la clave de Gemini no
-viaja al navegador.
-
-## Fusión de los dos repos (Opción A)
-
-Este repo (público) es la **base**. Falta traerle el código fuente que vive en
-`elecciones-colombia-2026` (privado). Como el `index.html` ya se generaba **junto a**
-`build_html.py`, la fusión se hace en la **raíz**, sin reorganizar carpetas.
-
-Los comandos exactos (que preservan el historial del repo privado) se entregaron en el
-hilo de trabajo; en resumen: añadir el repo privado como remoto, hacer
-`git merge --allow-unrelated-histories`, conservar **este** `README.md`/`index.html`
-ante conflictos, y volver a publicar. Una vez integrado, el repo privado puede
-archivarse.
+GitHub Pages sirve **`index.html` desde la raíz** — no lo muevas de ahí o se rompe la
+URL publicada. En público, el chat pasa por el Cloudflare Worker; la clave de Gemini
+no viaja al navegador.
