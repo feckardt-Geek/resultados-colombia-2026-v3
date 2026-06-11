@@ -8,7 +8,7 @@
 secrets.*
 credentials.*
 
-# ─── Python (entra con build_html.py / server.py) ────────────────
+# ─── Python (build_html.py / server.py / make_*.py) ──────────────
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -16,6 +16,13 @@ __pycache__/
 venv/
 env/
 .pytest_cache/
+
+# ─── Artefactos generados (se regeneran; NO versionar) ───────────
+# El dashboard PUBLICADO es index.html (ese SÍ se versiona).
+# Lo de abajo son salidas intermedias o reportes regenerables:
+Resultados_Elecciones_Colombia_2026.html
+Resultados_Elecciones_Colombia_2026_ver3.html
+*.pdf
 
 # ─── Sistema operativo / editores ────────────────────────────────
 .DS_Store
