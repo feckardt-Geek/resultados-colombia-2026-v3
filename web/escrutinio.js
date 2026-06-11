@@ -1,7 +1,7 @@
 /* Panel "Escrutinio oficial vs. Preconteo" — Colombia 2026, 1.ª vuelta.
    - Preconteo: se toma del feed en vivo (local) o del snapshot incrustado (público).
-   - Escrutinio: cifras OFICIALES de la Registraduría (escrutinio del 31 may 2026).
-     La Registraduría reportó 99,94% de coincidencia con el preconteo; las
+   - Escrutinio: cifras OFICIALES — escrutinio DEFINITIVO declarado por el CNE
+     (1.ª vuelta, 31 may 2026). 99,94% de coincidencia con el preconteo; las
      diferencias por candidato son mínimas y NO se publican desagregadas por
      departamento como dato abierto. */
 (function () {
