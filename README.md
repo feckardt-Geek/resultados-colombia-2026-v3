@@ -29,7 +29,8 @@ El mismo dashboard funciona en **dos modos**, que se resuelven solos según dón
 ├── index.html        Dashboard PUBLICADO (lo sirve GitHub Pages). Generado por build_html.py.
 ├── build_html.py     Genera el dashboard incrustando los datos (lee de web/).
 ├── server.py         Servidor local: sirve web/ + /api/resultados, /api/chat (Gemini), etc.
-├── publicar.ps1      Atajo: regenera el dashboard y lo publica (Windows / PowerShell).
+├── publicar.ps1      Atajo para publicar en Windows (PowerShell).
+├── publicar.sh       Atajo para publicar en Mac / Linux (bash/zsh).
 ├── make_pdf.py       Genera el informe PDF (marca EDFO).
 ├── make_swing_img.py Genera la imagen del mapa de giro 2022→2026.
 ├── worker.js         Cloudflare Worker: proxy a Gemini para el chat en la web pública.
@@ -41,12 +42,10 @@ El mismo dashboard funciona en **dos modos**, que se resuelven solos según dón
 
 ## Actualizar el dashboard (p. ej. la 2.ª vuelta del 21 de junio)
 
-**Forma rápida (Windows / PowerShell):**
-```powershell
-.\publicar.ps1
-```
-Consulta el feed oficial, regenera `index.html` y lo sube; GitHub Pages se actualiza
-en ~1 minuto (el enlace no cambia).
+**Forma rápida** (consulta el feed oficial, regenera `index.html` y lo sube; Pages
+se actualiza en ~1 min y el enlace no cambia):
+- **Mac / Linux:** `./publicar.sh`
+- **Windows (PowerShell):** `.\publicar.ps1`
 
 **Manual / multiplataforma:**
 ```bash
