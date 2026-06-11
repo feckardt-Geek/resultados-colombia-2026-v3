@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resultados Elecciones Presidenciales · Colombia 2026</title>
+  <meta name="description" content="Resultados de la primera vuelta presidencial de Colombia 2026: De la Espriella vs. Cepeda, por departamento, ciudad y exterior, con mapa y analisis." />
+  <!-- Vista previa al compartir (WhatsApp / redes) -->
+  <meta property="og:title" content="Resultados Elecciones Presidenciales · Colombia 2026" />
+  <meta property="og:description" content="Primera vuelta: De la Espriella vs. Cepeda. Resultados por departamento, ciudad y exterior, mapa y analisis en un solo tablero." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_CO" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="theme-color" content="#1A1915" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/asistente.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="lienzo">
+    <!-- Encabezado -->
+    <header class="cabecera">
+      <div class="cabecera__titulo">
+        <span class="eyebrow">República de Colombia · Registraduría Nacional</span>
+        <h1>Presidencia 2026 <span class="ronda">Primera vuelta</span></h1>
+        <p class="subtitulo">Avance del conteo en tiempo real · 31 de mayo de 2026</p>
+      </div>
+      <div class="cabecera__estado">
+        <div class="boletin" id="boletinCaja">
+          <span class="boletin__label">Boletín</span>
+          <span class="boletin__num" id="boletinNum">—</span>
+        </div>
+        <div class="reloj" id="reloj">--:--:--</div>
+        <button class="btn-actualizar-top" id="btnActualizarTop" type="button" title="Actualizar datos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36"></path><polyline points="21 3 21 9 15 9"></polyline>
+          </svg>
+          Actualizar
+        </button>
+        <button class="btn-compartir" id="btnCompartir" type="button" title="Compartir enlace">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"></line>
+          </svg>
+          Compartir
+        </button>
+      </div>
+    </header>
+
+    <!-- Aviso de fuente -->
+    <div class="aviso" id="aviso">
+      <span class="punto" id="avisoPunto"></span>
+      <span id="avisoTexto">Cargando datos…</span>
+    </div>
+
+    <!-- Tarjetas resumen -->
+    <section class="metricas">
+      <article class="metrica">
+        <span class="metrica__label">Mesas informadas</span>
+        <span class="metrica__valor" id="mMesasPct">—</span>
+        <span class="metrica__detalle" id="mMesasDet">—</span>
+        <div class="barra-mesas"><div class="barra-mesas__fill" id="barraMesas"></div></div>
+      </article>
+      <article class="metrica">
+        <span class="metrica__label">Votos contabilizados</span>
+        <span class="metrica__valor" id="mVotos">—</span>
+        <span class="metrica__detalle" id="mVotosDet">—</span>
+      </article>
+      <article class="metrica">
+        <span class="metrica__label">Líder provisional</span>
+        <span class="metrica__valor metrica__valor--sm" id="mLider">—</span>
+        <span class="metrica__detalle" id="mLiderPct">—</span>
+      </article>
+      <article class="metrica">
+        <span class="metrica__label">Próxima actualización</span>
+        <span class="metrica__valor" id="mCuenta">60</span>
+        <span class="metrica__detalle">segundos · auto-refresco</span>
+      </article>
+    </section>
+
+    <!-- Escenario: Cepeda vs. bloque de derecha (De la Espriella + Valencia) -->
+    <section class="panel panel--vs" id="panelVs" style="display:none">
+      <div class="vs__head">
+        <h2>Cepeda vs. De la&nbsp;Espriella + Valencia</h2>
+        <span class="vs__hint">Suma del bloque de derecha frente a Cepeda</span>
+      </div>
+      <div class="vs__bar">
+        <div class="vs__seg vs__seg--ce" id="vsCe"><span id="vsCeIn"></span></div>
+        <div class="vs__seg vs__seg--de" id="vsDe"><span id="vsDeIn"></span></div>
+      </div>
+      <div class="vs__cols">
+        <div class="vs__col">
+          <span class="vs__name"><span class="vs__dot" style="background:#8C378C"></span> Iván Cepeda</span>
+          <span class="vs__pct" id="vsCePct">—</span>
+          <span class="vs__n" id="vsCeN"></span>
+        </div>
+        <div class="vs__mid" id="vsGap">—</div>
+        <div class="vs__col vs__col--right">
+          <span class="vs__name">De la Espriella + Valencia <span class="vs__dot" style="background:#CE742A"></span></span>
+          <span class="vs__pct" id="vsDePct">—</span>
+          <span class="vs__break" id="vsBreak"></span>
+        </div>
+      </div>
+      <p class="vs__nota" id="vsNota"></p>
+    </section>
+
+    <!-- Participación electoral / abstencionismo -->
+    <section class="panel panel--part">
+      <div class="part__head">
+        <h2>Participación electoral</h2>
+        <span class="part__censo">Censo: <strong id="pCenso">—</strong> habilitados</span>
+      </div>
+      <div class="part__bar" id="partBar">
+        <div class="part__seg part__seg--part" id="segPart"></div>
+        <div class="part__seg part__seg--abs" id="segAbs"></div>
+      </div>
+      <div class="part__legend">
+        <div class="leg">
+          <span class="leg__dot leg__dot--part"></span>
+          <span class="leg__txt">Participación</span>
+          <strong id="pPartPct">—</strong>
+          <span class="leg__n" id="pPartN"></span>
+        </div>
+        <div class="leg">
+          <span class="leg__dot leg__dot--abs"></span>
+          <span class="leg__txt">Abstención</span>
+          <strong id="pAbsPct">—</strong>
+          <span class="leg__n" id="pAbsN"></span>
+        </div>
+      </div>
+      <div class="desglose">
+        <div class="desg">
+          <span class="desg__lbl">Votos válidos</span>
+          <span class="desg__pct" id="dValPct">—</span>
+          <span class="desg__n" id="dValN"></span>
+        </div>
+        <div class="desg">
+          <span class="desg__lbl">Voto en blanco</span>
+          <span class="desg__pct" id="dBlaPct">—</span>
+          <span class="desg__n" id="dBlaN"></span>
+        </div>
+        <div class="desg">
+          <span class="desg__lbl">Votos nulos</span>
+          <span class="desg__pct" id="dNulPct">—</span>
+          <span class="desg__n" id="dNulN"></span>
+        </div>
+        <div class="desg">
+          <span class="desg__lbl">No marcados</span>
+          <span class="desg__pct" id="dNmaPct">—</span>
+          <span class="desg__n" id="dNmaN"></span>
+        </div>
+      </div>
+      <p class="part__nota" id="pNota"></p>
+    </section>
+
+    <!-- Resultados por candidato -->
+    <section class="panel">
+      <div class="panel__header">
+        <h2>Resultados por candidato</h2>
+        <div class="panel__acciones">
+          <button class="btn btn--sec" id="btnCsv">⬇ Descargar CSV</button>
+          <button class="btn" id="btnRefrescar">Actualizar ahora</button>
+        </div>
+      </div>
+      <div class="candidatos" id="candidatos"></div>
+    </section>
+
+    <!-- Escrutinio oficial vs. Preconteo -->
+    <section class="panel" id="panelEscrutinio" style="display:none">
+      <div class="panel__header">
+        <h2>Escrutinio oficial vs. preconteo</h2>
+        <span class="dept__sub">Verificación legal del conteo · 1.ª vuelta</span>
+      </div>
+      <div class="esc__stats">
+        <div class="esc__stat">
+          <span class="esc__big">99,94 %</span>
+          <span class="esc__lbl">Coincidencia preconteo ↔ escrutinio</span>
+        </div>
+        <div class="esc__stat">
+          <span class="esc__big">99,98 %</span>
+          <span class="esc__lbl">Mesas escrutadas</span>
+        </div>
+        <div class="esc__stat">
+          <span class="esc__big">33</span>
+          <span class="esc__lbl">Mesas pendientes (de 122.000+)</span>
+        </div>
+      </div>
+      <div class="dept-wrap">
+        <table class="dept-tabla esc__tabla">
+          <thead>
+            <tr>
+              <th>Candidato</th>
+              <th class="num">Preconteo</th>
+              <th class="num">Escrutinio</th>
+              <th class="num">Diferencia</th>
+            </tr>
+          </thead>
+          <tbody data-esc="body"></tbody>
+        </table>
+      </div>
+      <p class="vs__nota">El <strong>escrutinio</strong> (conteo legal a cargo de los jurados) confirmó el <strong>preconteo</strong>: las variaciones fueron mínimas (coincidencia del 99,94% reportada por la Registraduría). La Registraduría no publica el escrutinio desagregado por departamento como dato abierto. Fuentes: Registraduría Nacional del Estado Civil; cobertura de El Espectador, El Colombiano e Infobae. Corte: 3 de junio de 2026.</p>
+    </section>
+
+    <!-- Desempeño de Paloma Valencia -->
+    <section class="panel" id="panelPaloma" style="display:none">
+      <div class="panel__header">
+        <h2>Paloma Valencia — desempeño</h2>
+        <span class="dept__sub" id="palSub"></span>
+      </div>
+      <div class="pal__head">
+        <div class="pal__big">
+          <span class="pal__pct" id="palPct">—</span>
+          <span class="pal__meta"><span id="palVotos"></span> · <span id="palPos"></span></span>
+        </div>
+        <div class="pal__bar3" id="palBar3"></div>
+      </div>
+      <div class="pal__grid">
+        <div class="pal__col">
+          <h3>Mejores departamentos</h3>
+          <div id="palDept" class="pal__list"></div>
+        </div>
+        <div class="pal__col">
+          <h3>Mejores ciudades</h3>
+          <div id="palCiu" class="pal__list"></div>
+        </div>
+        <div class="pal__col">
+          <h3>En el exterior</h3>
+          <div id="palExt" class="pal__list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explorador: selección múltiple de departamentos y ciudades -->
+    <section class="panel" id="panelExplorar" style="display:none">
+      <div class="panel__header">
+        <h2>Explorar y comparar territorios</h2>
+        <span class="dept__sub">Selecciona 1 o varios departamentos y ciudades</span>
+      </div>
+      <div class="expl__group">
+        <div class="expl__lbl">Departamentos
+          <button class="expl__act" data-t="dept" data-a="all">todos</button>·<button class="expl__act" data-t="dept" data-a="none">ninguno</button></div>
+        <div class="expl__chips" id="explDeptChips"></div>
+      </div>
+      <div class="expl__group">
+        <div class="expl__lbl">Ciudades
+          <button class="expl__act" data-t="ciu" data-a="all">todas</button>·<button class="expl__act" data-t="ciu" data-a="none">ninguna</button></div>
+        <div class="expl__chips" id="explCiuChips"></div>
+      </div>
+      <div class="dept-wrap">
+        <table class="dept-tabla">
+          <thead>
+            <tr>
+              <th>Territorio</th>
+              <th>1.º lugar</th>
+              <th>2.º lugar</th>
+              <th>3.º lugar</th>
+              <th class="num">Participación</th>
+              <th class="num">% mesas</th>
+            </tr>
+          </thead>
+          <tbody id="explBody"></tbody>
+        </table>
+      </div>
+      <p class="vs__nota" id="explNota"></p>
+    </section>
+
+    <!-- Mapa de Colombia por ganador -->
+    <section class="panel" id="panelMapa" style="display:none">
+      <div class="panel__header">
+        <h2>Mapa por departamento</h2>
+        <span class="dept__sub" id="mapaSub">Ganador por departamento</span>
+      </div>
+      <div class="mapa__wrap">
+        <svg id="mapaSvg" class="mapa__svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa de Colombia por ganador"></svg>
+        <div class="mapa__tip" id="mapaTip" style="display:none"></div>
+      </div>
+      <div class="mapa__leyenda">
+        <span class="mapa__lg"><span class="mapa__sw" style="background:#CE742A"></span> De la Espriella <strong id="mapaNde">—</strong></span>
+        <span class="mapa__lg"><span class="mapa__sw" style="background:#8C378C"></span> Cepeda <strong id="mapaNce">—</strong></span>
+      </div>
+    </section>
+
+    <!-- ===== Filtro geográfico multi-select (ver3) ===== -->
+    <section class="panel" id="panelGeoFiltro">
+      <div class="panel__header">
+        <h2>Filtro por territorio</h2>
+        <span class="dept__sub">Selecciona 1 o varios departamentos y ciudades · <span id="geoCount" class="geo__count">sin filtro (todo el pa&iacute;s)</span></span>
+      </div>
+      <div class="geo__bar">
+        <div class="geo__row">
+          <span class="geo__legend">Departamentos</span>
+          <div class="geo__chips" id="geoChipsDep"></div>
+          <div class="geo__act">
+            <button class="geo__btn" data-geo-all="dep">Todos</button>
+            <button class="geo__btn" data-geo-clr="dep">Limpiar</button>
+          </div>
+        </div>
+        <div class="geo__row">
+          <span class="geo__legend">Ciudades</span>
+          <div class="geo__chips" id="geoChipsCiu"></div>
+          <div class="geo__act">
+            <button class="geo__btn" data-geo-all="ciu">Todas</button>
+            <button class="geo__btn" data-geo-clr="ciu">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Selecci&oacute;n combinada (ver3) ===== -->
+    <section class="panel" id="panelGeoCombo" style="display:none">
+      <div class="panel__header">
+        <h2>Selecci&oacute;n combinada</h2>
+        <span class="dept__sub" id="comboSub"></span>
+      </div>
+      <div class="combo__grid" id="comboGrid"></div>
+      <div id="comboMunis"></div>
+      <p class="vs__nota">Suma de los territorios elegidos. % sobre votos v&aacute;lidos (consistente con el tablero); participaci&oacute;n sobre censo; candidatos seg&uacute;n el top-3 reportado por territorio. Uni&oacute;n sin doble conteo: una ciudad dentro de un departamento ya seleccionado no se vuelve a sumar.</p>
+    </section>
+
+    <!-- Participación y líder por departamento -->
+    <section class="panel" id="panelDept" style="display:none">
+      <div class="panel__header">
+        <h2>Por departamento</h2>
+        <span class="dept__sub" id="deptSub"></span>
+      </div>
+      <div class="dept-wrap">
+        <table class="dept-tabla">
+          <thead>
+            <tr>
+              <th>Departamento</th>
+              <th>1.º lugar</th>
+              <th>2.º lugar</th>
+              <th>3.º lugar</th>
+              <th class="num">Participación</th>
+              <th class="num">% mesas</th>
+            </tr>
+          </thead>
+          <tbody id="deptBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Ciudades principales (top 20 por población) -->
+    <section class="panel" id="panelCiudades" style="display:none">
+      <div class="panel__header">
+        <h2>Ciudades principales</h2>
+        <span class="dept__sub" id="ciuSub"></span>
+      </div>
+      <div class="dept-wrap">
+        <table class="dept-tabla">
+          <thead>
+            <tr>
+              <th class="num">#</th>
+              <th>Ciudad</th>
+              <th>1.º lugar</th>
+              <th>2.º lugar</th>
+              <th>3.º lugar</th>
+              <th class="num">Participación</th>
+              <th class="num">% mesas</th>
+            </tr>
+          </thead>
+          <tbody id="ciuBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Resumen: departamentos ganados por candidato -->
+    <section class="panel" id="panelConteo" style="display:none">
+      <div class="panel__header">
+        <h2>Departamentos ganados</h2>
+        <span class="dept__sub" id="conteoSub"></span>
+      </div>
+      <div class="conteo" id="conteoBody"></div>
+    </section>
+
+    <!-- Colombianos en el exterior -->
+    <section class="panel" id="panelExterior" style="display:none">
+      <div class="panel__header">
+        <h2>🌎 Colombianos en el exterior</h2>
+        <span class="dept__sub" id="extSub"></span>
+      </div>
+      <div class="ext__top" id="extTop"></div>
+      <div class="dept-wrap">
+        <table class="dept-tabla">
+          <thead>
+            <tr>
+              <th>País / consulado</th>
+              <th>Líder provisional</th>
+              <th class="num">% líder</th>
+              <th class="num">Votantes</th>
+              <th class="num">% mesas</th>
+            </tr>
+          </thead>
+          <tbody id="extBody"></tbody>
+        </table>
+      </div>
+      <p class="vs__nota">El voto en el exterior se agrupa por país (cada uno reúne sus consulados / centros de votación). También aparece como «Consulados» en la tabla por departamento.</p>
+    </section>
+
+    <!-- Evolución por boletín (línea de tiempo) -->
+    <section class="panel" id="panelSerie">
+      <div class="panel__header">
+        <h2>Evolución por boletín</h2>
+        <span class="dept__sub" id="serieSub"></span>
+      </div>
+      <div class="serie__wrap">
+        <svg id="serieSvg" class="serie__svg"></svg>
+      </div>
+      <div class="serie__leg">
+        <span><span class="serie__dot" style="background:#CE742A"></span> De la Espriella</span>
+        <span><span class="serie__dot" style="background:#8C378C"></span> Cepeda</span>
+        <span><span class="serie__dot" style="background:#2980B9"></span> Valencia</span>
+      </div>
+      <p class="vs__nota" id="serieNota"></p>
+    </section>
+
+    <!-- Comparación 2026 vs 2022 -->
+    <section class="panel" id="panelComp">
+      <div class="panel__header">
+        <h2>2026 vs. 2022 — referencia histórica</h2>
+        <span class="dept__sub">1.ª vuelta hoy frente a 2022</span>
+      </div>
+      <div class="comp">
+        <div class="comp__card">
+          <span class="comp__tag" style="--c:#8C378C">Izquierda · Pacto Histórico</span>
+          <div class="comp__rows">
+            <div class="comp__r comp__r--now">
+              <span class="comp__lbl">Cepeda 2026 <small>(1.ª v., parcial)</small></span>
+              <span class="comp__v" id="cmpCeNow">—</span>
+            </div>
+            <div class="comp__r">
+              <span class="comp__lbl">Petro 2022 <small>(1.ª vuelta)</small></span>
+              <span class="comp__v">8.542.020 · 40,34 %</span>
+            </div>
+            <div class="comp__r">
+              <span class="comp__lbl">Petro 2022 <small>(2.ª vuelta, ganó)</small></span>
+              <span class="comp__v">11.292.758 · 50,42 %</span>
+            </div>
+            <div class="comp__delta" id="cmpCeDelta"></div>
+          </div>
+        </div>
+        <div class="comp__card">
+          <span class="comp__tag" style="--c:#CE742A">Derecha (suma de los dos primeros)</span>
+          <div class="comp__rows">
+            <div class="comp__r comp__r--now">
+              <span class="comp__lbl">De la Espriella + Valencia 2026</span>
+              <span class="comp__v" id="cmpDeNow">—</span>
+            </div>
+            <div class="comp__r">
+              <span class="comp__lbl">Rodolfo + Fico 2022 <small>(1.ª vuelta)</small></span>
+              <span class="comp__v">11.035.057 · 52,11 %</span>
+            </div>
+            <div class="comp__r">
+              <span class="comp__lbl">Rodolfo 2022 <small>(2.ª v., perdió)</small></span>
+              <span class="comp__v">10.604.656 · 47,35 %</span>
+            </div>
+            <div class="comp__delta" id="cmpDeDelta"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resultados 2022 por departamento -->
+    <section class="panel" id="panel2022" style="display:none">
+      <div class="panel__header">
+        <h2>Colombia 2022 por departamento</h2>
+        <div class="seg2022" id="seg2022">
+          <button class="seg2022__b is-on" data-v="r1">1.ª vuelta</button>
+          <button class="seg2022__b" data-v="r2">2.ª vuelta</button>
+        </div>
+      </div>
+      <div class="dept-wrap">
+        <table class="dept-tabla">
+          <thead id="head2022"></thead>
+          <tbody id="body2022"></tbody>
+        </table>
+      </div>
+      <p class="vs__nota">Fuente: Registraduría Nacional (consolidado oficial 2022). En 2.ª vuelta solo compitieron Petro y Hernández; Fico fue eliminado en 1.ª vuelta y apoyó a Hernández.</p>
+    </section>
+
+    <!-- Swing: 2022 vs 2026 -->
+    <section class="panel panel--swing" id="panelSwing" style="display:none">
+      <div class="panel__header">
+        <h2>¿Hacia dónde se movió Colombia? · 2022 → 2026</h2>
+        <span class="dept__sub">Giro político entre la 1.ª vuelta de 2022 y la de 2026</span>
+      </div>
+      <div class="swing__nat" id="swingNat"></div>
+      <div class="swing__cols">
+        <div class="swing__mapwrap">
+          <svg id="mapaSwing" class="mapa__svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa de giro 2022 a 2026"></svg>
+          <div class="mapa__tip" id="swingTip" style="display:none"></div>
+        </div>
+        <div class="swing__side">
+          <div class="swing__leyenda">
+            <div class="sw__lg"><span class="sw__sw" style="background:#B85C28"></span> Giro fuerte a la derecha</div>
+            <div class="sw__lg"><span class="sw__sw" style="background:#E0A36A"></span> Giro leve a la derecha</div>
+            <div class="sw__lg"><span class="sw__sw" style="background:#C9C2B2"></span> Sin cambio</div>
+            <div class="sw__lg"><span class="sw__sw" style="background:#B98FC0"></span> Giro leve a la izquierda</div>
+            <div class="sw__lg"><span class="sw__sw" style="background:#6E2A6E"></span> Giro fuerte a la izquierda</div>
+          </div>
+          <div class="swing__flips" id="swingFlips"></div>
+        </div>
+      </div>
+      <div class="dept-wrap">
+        <table class="dept-tabla">
+          <thead>
+            <tr>
+              <th>Departamento</th>
+              <th>Ganó 2022 (2.ª v.)</th>
+              <th>Lidera 2026 (1.ª v.)</th>
+              <th class="num" title="Cuánto se movió el departamento entre 2022 y 2026 (1.ª vuelta), comparando el bloque de derecha vs el de izquierda. POSITIVO = se movió a la derecha; NEGATIVO = a la izquierda. OJO: mide el cambio de margen, NO quién gana — un departamento puede dar '+' (a la derecha) y aun así ganarlo Cepeda, solo que por menos margen que Petro en 2022.">Giro vs 2022 <span class="th__hint">(+der / −izq)&#160;ⓘ</span></th>
+            </tr>
+          </thead>
+          <tbody id="swingBody"></tbody>
+        </table>
+      </div>
+      <p class="vs__nota">El «giro» mide el cambio del margen derecha−izquierda entre 2022 y 2026 (1.ª vuelta). Izquierda = Petro→Cepeda; derecha = (Rodolfo+Fico)→(De la Espriella+Valencia). Positivo = giro a la derecha. Es comparación de bloques, no transferencia individual de votos.</p>
+    </section>
+
+    <!-- Proyección / tendencias a segunda vuelta -->
+    <section class="panel" id="panelProy">
+      <div class="panel__header">
+        <h2>Proyección a 2.ª vuelta</h2>
+        <span class="dept__sub">Reparte las bolsas de votos y mira el resultado · 21 de junio</span>
+      </div>
+      <div class="proy__bar">
+        <div class="proy__seg proy__seg--de" id="proyDe"><span id="proyDeIn"></span></div>
+        <div class="proy__seg proy__seg--ce" id="proyCe"><span id="proyCeIn"></span></div>
+      </div>
+      <p class="proy__resumen" id="proyResumen"></p>
+      <div class="proy__sliders" id="proySliders"></div>
+      <p class="vs__nota">Reparte cada <strong>bolsa de votos</strong> entre los dos finalistas moviendo los controles. La barra de arriba se recalcula en vivo. Es un escenario hipotético: los votos no se transfieren en bloque.</p>
+    </section>
+
+    <!-- Polymarket -->
+    <section class="panel panel--poly" id="panelPoly" style="display:none">
+      <div class="panel__header">
+        <h2>📈 Polymarket — mercado de predicción</h2>
+        <a class="dept__sub" id="polyLink" href="https://polymarket.com/event/colombia-presidential-election" target="_blank" rel="noopener">Ver en Polymarket ↗</a>
+      </div>
+      <div class="poly__grid">
+        <div class="poly__col">
+          <h3>Ganador 1.ª vuelta</h3>
+          <div class="poly__list" id="polyR1"></div>
+        </div>
+        <div class="poly__col">
+          <h3>Dupla que pasa a 2.ª vuelta</h3>
+          <div class="poly__list" id="polyAdv"></div>
+        </div>
+        <div class="poly__col poly__col--feat">
+          <h3>Ganador de la Presidencia <small>(2.ª vuelta · 21 jun)</small></h3>
+          <div class="poly__list" id="polyPres"></div>
+        </div>
+      </div>
+      <p class="vs__nota">Probabilidades implícitas del mercado (no son encuestas ni resultados oficiales). Se actualizan en tiempo real desde Polymarket.</p>
+    </section>
+
+    <!-- Rastreador de 2.ª vuelta -->
+    <section class="panel panel--r2" id="panelR2">
+      <div class="panel__header">
+        <h2>🗳️ Rastreador · 2.ª vuelta</h2>
+        <span class="dept__sub">Domingo 21 de junio de 2026</span>
+      </div>
+      <div class="r2__count" id="r2Count">—</div>
+      <div class="r2__duelo">
+        <div class="r2__cand" style="--c:#CE742A">
+          <span class="r2__nom">Abelardo de la Espriella</span>
+          <span class="r2__par">Defensores de la Patria · 1.º en 1.ª vuelta</span>
+        </div>
+        <div class="r2__vs">vs</div>
+        <div class="r2__cand r2__cand--r" style="--c:#8C378C">
+          <span class="r2__nom">Iván Cepeda Castro</span>
+          <span class="r2__par">Pacto Histórico · 2.º en 1.ª vuelta</span>
+        </div>
+      </div>
+      <p class="vs__nota" id="r2Nota">Estructura lista para la segunda vuelta. Cuando la Registraduría publique los boletines del 21 de junio, este tablero mostrará los resultados en vivo (usa el mismo feed oficial). El mercado de Polymarket arriba ya cotiza la Presidencia.</p>
+    </section>
+
+    <!-- Histórico: últimas 3 elecciones (selección múltiple) -->
+    <section class="panel" id="panelHist">
+      <div class="panel__header">
+        <h2>Últimas 3 elecciones presidenciales</h2>
+        <span class="dept__sub">Top 5 por vuelta · selección múltiple</span>
+      </div>
+      <div class="hist__controls">
+        <div class="hist__group">
+          <span class="hist__legend">Elección</span>
+          <label><input type="checkbox" class="hAnio" value="2014"> 2014</label>
+          <label><input type="checkbox" class="hAnio" value="2018"> 2018</label>
+          <label><input type="checkbox" class="hAnio" value="2022" checked> 2022</label>
+        </div>
+        <div class="hist__group">
+          <span class="hist__legend">Vuelta</span>
+          <label><input type="checkbox" class="hVuelta" value="r1" checked> 1.ª vuelta</label>
+          <label><input type="checkbox" class="hVuelta" value="r2"> 2.ª vuelta</label>
+        </div>
+      </div>
+      <div class="hist__grid" id="histGrid"></div>
+    </section>
+
+    <!-- Análisis final y predicciones -->
+    <section class="panel" id="panelAnalisis">
+      <div class="panel__header">
+        <h2>Análisis y predicciones para la 2.ª vuelta</h2>
+        <span class="dept__sub">Lectura del resultado de hoy</span>
+      </div>
+      <div class="analisis" id="analisisBody"></div>
+    </section>
+
+    <!-- Encuestas vs. resultado real -->
+    <section class="panel" id="panelEncuestas">
+      <div class="panel__header">
+        <h2>Encuestas vs. resultado real</h2>
+        <span class="dept__sub">¿Cuál encuestadora se acercó más? · 1.ª vuelta</span>
+      </div>
+      <div class="enc__actual" id="encActual"></div>
+      <div class="dept-wrap">
+        <table class="dept-tabla enc__tabla">
+          <thead>
+            <tr>
+              <th>Encuestadora</th>
+              <th class="num">Cepeda</th>
+              <th class="num">De la Espriella</th>
+              <th class="num">Valencia</th>
+              <th class="num">Fajardo</th>
+              <th class="num">Error medio</th>
+              <th class="num">¿Acertó orden?</th>
+            </tr>
+          </thead>
+          <tbody id="encBody"></tbody>
+        </table>
+      </div>
+      <p class="vs__nota" id="encNota"></p>
+    </section>
+
+    <!-- Pie con fuentes -->
+    <footer class="pie">
+      <div class="pie__fuentes">
+        <strong>Fuentes oficiales y de cobertura</strong>
+        <ul>
+          <li>Registraduría Nacional del Estado Civil —
+            <a href="https://resultados.registraduria.gov.co/" target="_blank" rel="noopener">resultados.registraduria.gov.co</a>
+            (divulgación oficial de boletines)</li>
+          <li>Portal electoral —
+            <a href="https://www.registraduria.gov.co/" target="_blank" rel="noopener">registraduria.gov.co</a></li>
+          <li>Cobertura en vivo: El Espectador, CNN en Español, Infobae, RTVC Noticias</li>
+        </ul>
+      </div>
+      <div class="pie__nota" id="pieNota"></div>
+    </footer>
+  </div>
+
+  <script src="/app.js"></script>
+  <script src="/escrutinio.js"></script>
+  <script src="/asistente.js"></script>
+</body>
+</html>
